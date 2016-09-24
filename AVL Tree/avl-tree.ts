@@ -11,15 +11,6 @@ class AVLnode <T> {
     }
 }
 
-/** A hack to emulate a pointer to AVLnode.
- * Needed because javascript passes references by value only.
- * While most operations will work, they would not be saved outside the function scope.
- * Also, 'this' cannot be reassigned.
- */
-class nodePtr<T> {
-    constructor(public node: AVLnode<T> = null) {}
-}
-
 /** The balanced AVL tree */
 class AVLtree <T> {
     // public members organized here
@@ -33,25 +24,37 @@ class AVLtree <T> {
 
 
     // private members organized here
-    private root: nodePtr<T>
+    private root: AVLnode<T>
 
-    private rotateLeft(a: nodePtr<T>): nodePtr<T> {}
+    private rotateLeft(a: AVLnode<T>): AVLnode<T> {}
 
-    private rotateRight(a: nodePtr<T>): nodePtr<T> {}
+    private rotateRight(a: AVLnode<T>): AVLnode<T> {}
 
-    private rotateLeftThenRight(n: nodePtr<T>): nodePtr<T> {}
+    private rotateLeftThenRight(n: AVLnode<T>): AVLnode<T> {}
 
-    private rotateRightThenLeft(n: nodePtr<T>): nodePtr<T> {}
+    private rotateRightThenLeft(n: AVLnode<T>): AVLnode<T> {}
 
-    private rebalance(n: nodePtr<T>): void {
+    private rebalance(n: AVLnode<T>): void {
         this.setBalance(n)
 
-        if (n.node.balance === -2) {
-            if(this.height(n.node.left.left) >= this.height(n.node.left.right)) {
-                n.node = this.rotateRight(n).node
+        if (n.balance === -2) {
+            if(this.height(n.left.left) >= this.height(n.left.right)) {
+                n = this.rotateRight(n)
             } else {
-                n.node = this.rotateLeftThenRight(n).node
+                n = this.rotateLeftThenRight(n)
             }
+        } else if (n.balance === -2) {
+            if(this.height(n.right.right) >= this.height(n.right.left)) {
+                n = this.rotateLeft(n)
+            } else {
+                n = this.rotateRightThenLeft(n)
+            }
+        }
+
+        if (n.parent !== null) {
+            this.rebalance(n.parent)
+        } else {
+            this.root = n
         }
     }
 
