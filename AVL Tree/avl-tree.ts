@@ -178,7 +178,7 @@ class AVLtree <T> {
             } else {
                 n = this.rotateLeftThenRight(n)
             }
-        } else if (n.balance === -2) {
+        } else if (n.balance === 2) {
             if(this.height(n.right.right) >= this.height(n.right.left)) {
                 n = this.rotateLeft(n)
             } else {
@@ -212,8 +212,10 @@ class AVLtree <T> {
     }
 }
 
-function testavl(): void {
+/** Testing, not part of tree */
+(() => {
     let tree1 = new AVLtree<number>()
+    //*
     for (let i = 0; i < 20; ++i) {
         tree1.insert(i)
     }
@@ -223,6 +225,18 @@ function testavl(): void {
     tree1.insert(5)
     tree1.insert(10)
     tree1.insert(20)
-}
 
-testavl()
+    console.log(tree1.toString())
+    console.log(tree1.treeBalanceString())
+
+    tree1.deleteKey(4)
+
+    console.log(tree1.toString())
+    console.log(tree1.treeBalanceString())
+    //*/
+
+    for (let i = 0; i < 10; ++i) {
+        tree1.insert(i)
+        console.log(tree1.toString())
+    }
+})()
