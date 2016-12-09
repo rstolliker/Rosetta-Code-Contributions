@@ -1,0 +1,3 @@
+function flatten(list: number) {
+	
+}
